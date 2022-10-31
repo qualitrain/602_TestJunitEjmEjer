@@ -1,5 +1,7 @@
 package qtx.org.entidades;
 
+import qtx.org.negocio.IMovtoComisionable;
+
 public class Producto {
 	private String id;
 	private String nombre;
@@ -45,6 +47,10 @@ public class Producto {
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", costo=" + costo + "]";
+	}
+
+	public IMovtoComisionable getIMovtoComisionable(int cantidad) {
+		return new MovtoProductoComisionable(this,cantidad);
 	}
 	
 	

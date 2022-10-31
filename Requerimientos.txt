@@ -8,5 +8,12 @@
      a. No tienen costo unitario, por lo que la base de la comisión es el precio del servicio
      b. Tienen una duración (anual, semestral, bimestral o mensual)
      c. El porcentaje de comisión será distinto del de los productos y está en función de la 
-        duración del servicio.
-   
+        duración del servicio. 
+        
+        NOTA:¿Cada servicio tiene una sola temporalidad o varias? 
+        
+    PREMISAS:
+     i. Cada servicio tiene un precio base diario que puede o no, tener descuentos 
+     ii. La calculadora de comisiones no considera descuentos. Si los hay deberían ser integrados
+         en el precio base dado a la calculadora.
+     iii. El mismo servicio puede tener varias temporalidades
