@@ -92,6 +92,42 @@ public class CalculadoraComisionesTests {
 		assertEquals(comisionEsperada, comision);
 	}
 	@Test
+	@DisplayName("Calcular comision s/servicio válido, con periodicidad mensual y cant=1 -uso clase anonima-")
+	public void testCalcularComisionServicioOK_AnonymousClass() {
+		
+		//Dados
+		double porcComision = 0.10;
+		double precioDia = 5.00;
+		double comisionEsperada = precioDia * 30 * porcComision;
+		Servicio servicio = new Servicio("MC01","membresia Club",precioDia);
+		
+		//Cuando
+		IMovtoComisionable movto = servicio.getIMovtoComisionable_ClAnon(Temporalidad.MENSUAL, 1);
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
+		double comision = calculadora.calcularComision(movto);
+		
+		//Entonces
+		assertEquals(comisionEsperada, comision);
+	}
+	@Test
+	@DisplayName("Calcular comision s/servicio válido, con periodicidad mensual y cant=1 -uso clase interna-")
+	public void testCalcularComisionServicioOK_InnerClass() {
+		
+		//Dados
+		double porcComision = 0.10;
+		double precioDia = 5.00;
+		double comisionEsperada = precioDia * 30 * porcComision;
+		Servicio servicio = new Servicio("MC01","membresia Club",precioDia);
+		
+		//Cuando
+		IMovtoComisionable movto = servicio.getIMovtoComisionable_InnerClass(Temporalidad.MENSUAL, 1);
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
+		double comision = calculadora.calcularComision(movto);
+		
+		//Entonces
+		assertEquals(comisionEsperada, comision);
+	}
+	@Test
 	@DisplayName("Calcular comision s/ IMovtoComisionable con Producto válido, con Utilidad y cant=1")
 	public void testCalcularComisionProductoOK() {
 		
