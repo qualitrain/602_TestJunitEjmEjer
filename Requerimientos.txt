@@ -17,3 +17,5 @@
      ii. La calculadora de comisiones no considera descuentos. Si los hay deberían ser integrados
          en el precio base dado a la calculadora.
      iii. El mismo servicio puede tener varias temporalidades
+     
+1.4 URGENTE: Si los productos tienen un porcentaje de utilidad > 100% Se Debe otorgar un 5% adicional de comisión

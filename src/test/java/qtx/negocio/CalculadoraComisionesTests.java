@@ -16,7 +16,7 @@ import qtx.org.negocio.Temporalidad;
 public class CalculadoraComisionesTests {
 	
 	@Test
-	@DisplayName("Calcular comision s/Producto válido, con Utilidad, cant=1")
+	@DisplayName("Calcular comision s/Producto válido, con Utilidad y cant=1")
 	public void testCalcularComisionOK() {
 		
 		//Dados
@@ -32,6 +32,7 @@ public class CalculadoraComisionesTests {
 	}
 
 	@Test
+	@DisplayName("Calcular comision s/Producto válido, sin Utilidad y cant=1")
 	public void testCalcularComision_utilidadNegativa() {
 		//Dados
 		Producto producto = new Producto("X-1", "Camisa", 255, 355); //Tiene utilidad negativa
@@ -43,6 +44,7 @@ public class CalculadoraComisionesTests {
 	}
 	
 	@Test
+	@DisplayName("Calcular comision s/Producto nulo")
 	public void testCalcularComision_productoNulo() {
 		//Dados
 		Producto producto = null;
@@ -55,19 +57,24 @@ public class CalculadoraComisionesTests {
 			
 	}
 	@Test
+	@DisplayName("Calcular comision s/Producto válido con cantidad <= 0")
 	public void testCalcularComision_cantidadEquivocada() {
 		//Dados
-		Producto producto = new Producto("X-1", "Camisa", 255, 355); //Tiene utilidad negativa
+		double precio = 600;
+		double costo = 355;
+		Producto producto = new Producto("X-1", "Camisa", precio, costo); 
+		int cantidad = -1;
 		
 		//Cuando		
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.10);
 		assertThrows(NegocioException.class, () -> {		
-			calculadora.calcularComision(producto, -1);
+			calculadora.calcularComision(producto, cantidad);
 		});
 			
 	}
 
 	@Test
+	@DisplayName("Calcular comision s/servicio válido, con periodicidad mensual y cant=1")
 	public void testCalcularComisionServicioOK() {
 		
 		//Dados
@@ -85,6 +92,7 @@ public class CalculadoraComisionesTests {
 		assertEquals(comisionEsperada, comision);
 	}
 	@Test
+	@DisplayName("Calcular comision s/ IMovtoComisionable con Producto válido, con Utilidad y cant=1")
 	public void testCalcularComisionProductoOK() {
 		
 		//Dados
@@ -95,12 +103,53 @@ public class CalculadoraComisionesTests {
 		Producto producto = new Producto("X-1", "Camisa", precio, costo);
 				
 		//Cuando
-		IMovtoComisionable movto = producto.getIMovtoComisionable(1);
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
-		double comision = calculadora.calcularComision(movto);
+		double comision = calculadora.calcularComision( producto.getIMovtoComisionable(1) );
 		
 		//Entonces
 		assertEquals(comisionEsperada, comision);
+	}
+	
+	@Test
+	@DisplayName("Calcular comision s/ IMovtoComisionable con Producto válido, con Utilidad negativa y cant=1")
+	public void testCalcularComisionProducto_utilidadNegativa() {
+		//Dados
+		Producto producto = new Producto("X-1", "Camisa", 255, 355); //Tiene utilidad negativa
+		//Cuando
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.10);
+		double comision = calculadora.calcularComision(producto.getIMovtoComisionable(1));
+//		double comision = calculadora.calcularComision(producto, 1);
+		//Entonces
+		assertEquals(0, comision);
+	}
+	@Test
+	@DisplayName("Calcular comision s/Movto Comisionable que es nulo")
+	public void testCalcularComision_IMovtoComisionableNulo() {
+		//Dados
+		IMovtoComisionable movto = null;
+		
+		//Cuando - entonces
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.10);
+		assertThrows(NegocioException.class, () -> {		
+			calculadora.calcularComision(movto);
+		});
+			
+	}
+	@Test
+	@DisplayName("Calcular comision s/Movto Comisionable con cantidad <= 0")
+	public void testCalcularComisionMovto_cantidadEquivocada() {
+		//Dados
+		double precio = 600;
+		double costo = 355;
+		Producto producto = new Producto("X-1", "Camisa", precio, costo); 
+		int cantidad = -1;
+		
+		//Cuando		
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.10);
+		assertThrows(NegocioException.class, () -> {		
+			calculadora.calcularComision(producto.getIMovtoComisionable(cantidad));
+		});
+			
 	}
 
 }
