@@ -1,4 +1,4 @@
-package qtx.org.negocio;
+package qtx.org.entidades;
 
 public enum Temporalidad {
 	ANUAL(360),

@@ -1,5 +1,7 @@
 package qtx.org.negocio;
 
+import qtx.org.entidades.Temporalidad;
+
 public interface IMovtoComisionable {
 	double getPrecioAplicablePorUnidad();
 	double getUtilidadPorUnidad();

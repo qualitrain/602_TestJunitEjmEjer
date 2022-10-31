@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import qtx.org.entidades.Producto;
 import qtx.org.entidades.Servicio;
+import qtx.org.entidades.Temporalidad;
 import qtx.org.negocio.CalculadoraComisiones;
 import qtx.org.negocio.IMovtoComisionable;
 import qtx.org.negocio.NegocioException;
-import qtx.org.negocio.Temporalidad;
 
 public class CalculadoraComisionesTests {
 	

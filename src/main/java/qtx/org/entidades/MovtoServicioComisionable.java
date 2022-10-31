@@ -2,7 +2,6 @@ package qtx.org.entidades;
 
 import qtx.org.negocio.IMovtoComisionable;
 import qtx.org.negocio.MetodoNoAplicableException;
-import qtx.org.negocio.Temporalidad;
 
 public class MovtoServicioComisionable implements IMovtoComisionable {
 	private Servicio servicio;

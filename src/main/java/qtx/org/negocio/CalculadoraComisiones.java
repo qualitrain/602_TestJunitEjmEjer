@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import qtx.org.entidades.Producto;
+import qtx.org.entidades.Temporalidad;
 
 public class CalculadoraComisiones {
 	

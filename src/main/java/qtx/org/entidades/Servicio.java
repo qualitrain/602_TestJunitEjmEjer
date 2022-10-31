@@ -1,7 +1,6 @@
 package qtx.org.entidades;
 
 import qtx.org.negocio.IMovtoComisionable;
-import qtx.org.negocio.Temporalidad;
 
 public class Servicio {
 	private String id;
