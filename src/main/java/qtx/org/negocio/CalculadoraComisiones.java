@@ -70,24 +70,8 @@ public class CalculadoraComisiones {
 	private double calcularComisionItemConTemporalidad(Temporalidad temporalidad, double precioPorUnidad,
 			int cantUnidades) {
 		double porcenComision = this.dsctosXTemporalidad.getOrDefault(temporalidad, this.porcentajeComision);
-		double precioPorTemporalidad = getPrecioPorTemporalidad(precioPorUnidad,temporalidad);
-		return porcenComision * precioPorTemporalidad * cantUnidades;
+		return porcenComision * precioPorUnidad * cantUnidades;
 		
-	}
-
-	private double getPrecioPorTemporalidad(double precioDiario, Temporalidad temporalidad) {
-		switch (temporalidad){
-		case ANUAL:
-			return precioDiario * 360;
-		case MENSUAL:
-			return precioDiario * 30;
-		case BIMESTRAL:
-			return precioDiario * 60;
-		case SEMESTRAL:
-			return precioDiario * 180;
-		}
-		throw new TemporalidadNoProgramadaException("Temporalidad " + temporalidad 
-				                      + " no programada en calculadora de comisiones");
 	}
 
 	private double calcularComisionItemAtemporal(IMovtoComisionable movto) {

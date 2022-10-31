@@ -18,7 +18,7 @@ public class MovtoServicioComisionable implements IMovtoComisionable {
 
 	@Override
 	public double getPrecioAplicablePorUnidad() {
-		return this.servicio.getPrecioPorDia();
+		return this.servicio.getPrecioPorDia() * duracion.getNdias();
 	}
 
 	@Override
