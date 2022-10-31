@@ -78,14 +78,18 @@ public class CalculadoraComisionesTests {
 	public void testCalcularComisionServicioOK() {
 		
 		//Dados
-		double porcComision = 0.10;
+		double porcComision = 0.08;
+		double porcComisionMensual = 0.10;
+		double porcComisionBimestral = 0.15;
 		double precioDia = 5.00;
-		double comisionEsperada = precioDia * 30 * porcComision;
+		double comisionEsperada = precioDia * 30 * porcComisionMensual;
 		Servicio servicio = new Servicio("MC01","membresia Club",precioDia);
 		
 		//Cuando
 		IMovtoComisionable movto = servicio.getIMovtoComisionable(Temporalidad.MENSUAL, 1);
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
+		calculadora.setDscto(Temporalidad.BIMESTRAL, porcComisionBimestral);
+		calculadora.setDscto(Temporalidad.MENSUAL, porcComisionMensual);
 		double comision = calculadora.calcularComision(movto);
 		
 		//Entonces
@@ -97,13 +101,19 @@ public class CalculadoraComisionesTests {
 		
 		//Dados
 		double porcComision = 0.10;
+		double porcComisionMensual = 0.10;
+		double porcComisionBimestral = 0.15;
+		double porcComisionSemestral = 0.20;
 		double precioDia = 5.00;
-		double comisionEsperada = precioDia * 30 * porcComision;
+		double comisionEsperada = precioDia * Temporalidad.SEMESTRAL.getNdias() * porcComisionSemestral;
 		Servicio servicio = new Servicio("MC01","membresia Club",precioDia);
 		
 		//Cuando
-		IMovtoComisionable movto = servicio.getIMovtoComisionable_ClAnon(Temporalidad.MENSUAL, 1);
+		IMovtoComisionable movto = servicio.getIMovtoComisionable_ClAnon(Temporalidad.SEMESTRAL, 1);
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
+		calculadora.setDscto(Temporalidad.BIMESTRAL, porcComisionBimestral);
+		calculadora.setDscto(Temporalidad.MENSUAL, porcComisionMensual);
+		calculadora.setDscto(Temporalidad.SEMESTRAL, porcComisionSemestral);
 		double comision = calculadora.calcularComision(movto);
 		
 		//Entonces
@@ -115,13 +125,15 @@ public class CalculadoraComisionesTests {
 		
 		//Dados
 		double porcComision = 0.10;
+		double porcComisionMensual = 0.10;
 		double precioDia = 5.00;
-		double comisionEsperada = precioDia * 30 * porcComision;
+		double comisionEsperada = precioDia * 30 * porcComisionMensual;
 		Servicio servicio = new Servicio("MC01","membresia Club",precioDia);
 		
 		//Cuando
 		IMovtoComisionable movto = servicio.getIMovtoComisionable_InnerClass(Temporalidad.MENSUAL, 1);
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
+		calculadora.setDscto(Temporalidad.MENSUAL, porcComisionMensual);
 		double comision = calculadora.calcularComision(movto);
 		
 		//Entonces
