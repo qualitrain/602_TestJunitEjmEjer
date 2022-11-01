@@ -88,8 +88,8 @@ public class CalculadoraComisionesTests {
 		//Cuando
 		IMovtoComisionable movto = servicio.getIMovtoComisionable(Temporalidad.MENSUAL, 1);
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
-		calculadora.setDscto(Temporalidad.BIMESTRAL, porcComisionBimestral);
-		calculadora.setDscto(Temporalidad.MENSUAL, porcComisionMensual);
+		calculadora.agregarPorcComisionXtemporalidad(Temporalidad.BIMESTRAL, porcComisionBimestral);
+		calculadora.agregarPorcComisionXtemporalidad(Temporalidad.MENSUAL, porcComisionMensual);
 		double comision = calculadora.calcularComision(movto);
 		
 		//Entonces
@@ -111,9 +111,9 @@ public class CalculadoraComisionesTests {
 		//Cuando
 		IMovtoComisionable movto = servicio.getIMovtoComisionable_ClAnon(Temporalidad.SEMESTRAL, 1);
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
-		calculadora.setDscto(Temporalidad.BIMESTRAL, porcComisionBimestral);
-		calculadora.setDscto(Temporalidad.MENSUAL, porcComisionMensual);
-		calculadora.setDscto(Temporalidad.SEMESTRAL, porcComisionSemestral);
+		calculadora.agregarPorcComisionXtemporalidad(Temporalidad.BIMESTRAL, porcComisionBimestral);
+		calculadora.agregarPorcComisionXtemporalidad(Temporalidad.MENSUAL, porcComisionMensual);
+		calculadora.agregarPorcComisionXtemporalidad(Temporalidad.SEMESTRAL, porcComisionSemestral);
 		double comision = calculadora.calcularComision(movto);
 		
 		//Entonces
@@ -133,26 +133,26 @@ public class CalculadoraComisionesTests {
 		//Cuando
 		IMovtoComisionable movto = servicio.getIMovtoComisionable_InnerClass(Temporalidad.MENSUAL, 1);
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
-		calculadora.setDscto(Temporalidad.MENSUAL, porcComisionMensual);
+		calculadora.agregarPorcComisionXtemporalidad(Temporalidad.MENSUAL, porcComisionMensual);
 		double comision = calculadora.calcularComision(movto);
 		
 		//Entonces
 		assertEquals(comisionEsperada, comision);
 	}
 	@Test
-	@DisplayName("Calcular comision s/ IMovtoComisionable con Producto válido, con Utilidad y cant=1")
+	@DisplayName("Calcular comision s/ IMovtoComisionable con Producto válido, con Utilidad y cant=10")
 	public void testCalcularComisionProductoOK() {
 		
 		//Dados
 		double porcComision = 0.10;
 		double precio = 500.00;
 		double costo = 200.00;
-		double comisionEsperada = (precio - costo) * porcComision;
+		double comisionEsperada = (precio - costo) * porcComision * 10;
 		Producto producto = new Producto("X-1", "Camisa", precio, costo);
 				
 		//Cuando
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
-		double comision = calculadora.calcularComision( producto.getIMovtoComisionable(1) );
+		double comision = calculadora.calcularComision( producto.getIMovtoComisionable(10) );
 		
 		//Entonces
 		assertEquals(comisionEsperada, comision);

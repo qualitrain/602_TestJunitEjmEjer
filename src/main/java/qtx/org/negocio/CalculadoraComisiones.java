@@ -10,27 +10,29 @@ public class CalculadoraComisiones {
 	
 	//Politicas de aplicacion General
 	private double porcentajeComision;	
-	private Map<Temporalidad,Double> dsctosXTemporalidad;
+	private Map<Temporalidad,Double> porcComisionXTemporalidad;
 
 	public CalculadoraComisiones(double porcentajeComision) {
 		super();
 		this.porcentajeComision = porcentajeComision;
-		this.dsctosXTemporalidad = new HashMap<>();
+		this.porcComisionXTemporalidad = new HashMap<>();
 	}
 	
-	public void setDscto(Temporalidad temp, double dscto) {
-		this.dsctosXTemporalidad.put(temp, dscto);
+	public void agregarPorcComisionXtemporalidad(Temporalidad temp, double dscto) {
+		this.porcComisionXTemporalidad.put(temp, dscto);
 	}
-	public void eliminarDscto(Temporalidad temp) {
-		this.dsctosXTemporalidad.remove(temp);
+	public void eliminarPorcComisionXtemporalidad(Temporalidad temp) {
+		this.porcComisionXTemporalidad.remove(temp);
 	}
 
-	public Map<Temporalidad, Double> getDsctosXTemporalidad() {
-		return dsctosXTemporalidad;
+	public Map<Temporalidad, Double> getPorcComisionXTemporalidad() {
+		return porcComisionXTemporalidad;
 	}
-	public void setDsctosXTemporalidad(Map<Temporalidad, Double> dsctosXTemporalidad) {
-		this.dsctosXTemporalidad = dsctosXTemporalidad;
+
+	public void setPorcComisionXTemporalidad(Map<Temporalidad, Double> porcComisionXTemporalidad) {
+		this.porcComisionXTemporalidad = porcComisionXTemporalidad;
 	}
+
 	public double getPorcentajeComision() {
 		return porcentajeComision;
 	}
@@ -58,10 +60,10 @@ public class CalculadoraComisiones {
 		if (movto == null) {
 			throw new ArgumentoInvalidoException("el IMovtoComisionable es nulo");
 		}
-		if(movto.getTemporalidad() == null) {
+		if(movto.getTemporalidad() == null) { //Es un producto
 			return this.calcularComisionItemAtemporal(movto);
 		}
-		else {
+		else { //Es un servicio
 			return this.calcularComisionItemConTemporalidad(movto.getTemporalidad(),
 					                                 movto.getPrecioAplicablePorUnidad(), 
 					                                 movto.getCantidadUnidades()   );
@@ -70,7 +72,7 @@ public class CalculadoraComisiones {
 
 	private double calcularComisionItemConTemporalidad(Temporalidad temporalidad, double precioPorUnidad,
 			int cantUnidades) {
-		double porcenComision = this.dsctosXTemporalidad.getOrDefault(temporalidad, this.porcentajeComision);
+		double porcenComision = this.porcComisionXTemporalidad.getOrDefault(temporalidad, this.porcentajeComision);
 		return porcenComision * precioPorUnidad * cantUnidades;
 		
 	}
