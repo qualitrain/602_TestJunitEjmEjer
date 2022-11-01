@@ -15,18 +15,47 @@ public class CalculadoraComisionesTests {
 	public void testCalcularComisionOK() {
 		
 		//Dados
-		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.10);
-//		Producto producto=null;
-		Producto producto = new Producto("X-1", "Camisa", 855, 355);
+		double costo = 355;
+		double precio = 700;
+		int cantidad = 5;
+		double porcComision = 0.10;
+		
+		double comisionEsperada = (precio - costo) * cantidad * porcComision;
+		
+		Producto producto = new Producto("X-1", "Camisa", precio, costo);
 		
 		//Cuando
-		double comision = calculadora.calcularComision(producto, 1);
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision);
+		double comision = calculadora.calcularComision(producto, cantidad);
 		
 		//Entonces
-//		assertEquals(50,comision,0.00001,"costo distinto del esperado");
-		assertEquals(50, comision);
+//		assertEquals(comisionEsperada, comision,0.00001,"costo distinto del esperado");
+		assertEquals(comisionEsperada, comision);
 	}
 
+	@Test
+	public void testCalcularComisionOK_UtilidadAlta() {
+		
+		//Dados
+		double costo  = 300;
+		double precio = 700;
+		int cantidad  = 5;
+		double porcComision      = 0.10;
+		double porcUtilidadAlta  = 1.0; 
+		double porcComisionExtra = 0.10;
+		
+		double comisionEsperada = (precio - costo) * cantidad * porcComision;
+		comisionEsperada += (precio - costo) * porcComisionExtra;
+		
+		Producto producto = new Producto("X-1", "Camisa", precio, costo);
+		
+		//Cuando
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(porcComision, porcComisionExtra, porcUtilidadAlta);
+		double comision = calculadora.calcularComision(producto, cantidad);
+		
+		//Entonces
+		assertEquals(comisionEsperada, comision);
+	}
 	@Test
 	public void testCalcularComision_utilidadNegativa() {
 		//Dados

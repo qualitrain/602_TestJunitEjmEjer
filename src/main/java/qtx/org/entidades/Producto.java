@@ -46,6 +46,8 @@ public class Producto {
 	public String toString() {
 		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", costo=" + costo + "]";
 	}
-	
+	public double getPorcentajeUtilidad() {
+		return (this.getUtilidad()/this.costo);
+	}
 	
 }

@@ -3,6 +3,10 @@
 1.2   Debe devolver el importe de la comisión por venta
 1.3   Las comisiones se calculan como un porcentaje (configurable) sobre la utilidad del producto
 
+1.4 URGENTE: Si los productos tienen un porcentaje de utilidad > 100% Se Debe otorgar un 5% adicional de comisión
+             Corregir bug: el calculo de comosiones no considera la cantidad vendida!
+                           el test correspondiente tampoco!
+                           
 2. La calculadora debe calcular comisiones sobre servicios
    Los servicios:
      a. No tienen costo unitario, por lo que la base de la comisión es el precio del servicio
