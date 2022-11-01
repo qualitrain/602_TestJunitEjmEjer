@@ -13,6 +13,7 @@ import qtx.org.negocio.CalculadoraComisiones;
 import qtx.org.negocio.IMovtoComisionable;
 import qtx.org.negocio.NegocioException;
 
+@DisplayName("Pruebas sobre CalculadoraComisiones")
 public class CalculadoraComisionesTests {
 	
 	@Test
@@ -159,7 +160,7 @@ public class CalculadoraComisionesTests {
 	}
 	
 	@Test
-	@DisplayName("Calcular comision s/ IMovtoComisionable con Producto válido, con Utilidad negativa y cant=1")
+	@DisplayName("Calcular comision s/ Movto Comisionable con Producto válido, con Utilidad negativa y cant=1")
 	public void testCalcularComisionProducto_utilidadNegativa() {
 		//Dados
 		Producto producto = new Producto("X-1", "Camisa", 255, 355); //Tiene utilidad negativa
@@ -171,7 +172,7 @@ public class CalculadoraComisionesTests {
 		assertEquals(0, comision);
 	}
 	@Test
-	@DisplayName("Calcular comision s/Movto Comisionable que es nulo")
+	@DisplayName("Calcular comision s/ Movto Comisionable que es nulo")
 	public void testCalcularComision_IMovtoComisionableNulo() {
 		//Dados
 		IMovtoComisionable movto = null;
