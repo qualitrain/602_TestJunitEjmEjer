@@ -64,6 +64,10 @@ public class CalculadoraComisiones {
 			return this.calcularComisionItemAtemporal(movto);
 		}
 		else { //Es un servicio
+			if(this.porcComisionXTemporalidad.get(movto.getTemporalidad()) == null     ) {
+				throw new TemporalidadNoProgramadaException("No se ha configurado un porcentaje "
+						+ "de descuento para la temporalidad" + movto.getTemporalidad());
+			}
 			return this.calcularComisionItemConTemporalidad(movto.getTemporalidad(),
 					                                 movto.getPrecioAplicablePorUnidad(), 
 					                                 movto.getCantidadUnidades()   );
