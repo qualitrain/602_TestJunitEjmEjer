@@ -64,6 +64,10 @@ public class CalculadoraComisiones {
 			return this.calcularComisionItemAtemporal(movto);
 		}
 		else { //Es un servicio
+			if(this.porcComisionXTemporalidad.get(movto.getTemporalidad())==null) {//¿Hay porc de comision para esa temporalidad?
+			    throw new ConfiguracionComisionesIncompletaException("NO existe "
+			    		+ "porcentaje de comision para " + movto.getTemporalidad());
+			}
 			return this.calcularComisionItemConTemporalidad(movto.getTemporalidad(),
 					                                 movto.getPrecioAplicablePorUnidad(), 
 					                                 movto.getCantidadUnidades()   );
