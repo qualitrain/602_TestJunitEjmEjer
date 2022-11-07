@@ -60,6 +60,9 @@ public class CalculadoraComisiones {
 		if (movto == null) {
 			throw new ArgumentoInvalidoException("el IMovtoComisionable es nulo");
 		}
+		if (movto.getId() == null || movto.getId().isEmpty() || movto.getId().isBlank()) {
+			throw new ArgumentoInvalidoException("el IMovtoComisionable tiene un id inválido");			
+		}
 		if(movto.getTemporalidad() == null) { //Es un producto
 			return this.calcularComisionItemAtemporal(movto);
 		}

@@ -18,4 +18,7 @@
          en el precio base dado a la calculadora.
      iii. El mismo servicio puede tener varias temporalidades
      
+3. La Calculadora debe cargar los porcentajes de comisión adicional X ID que estarán sujetos
+   a cambios que se decidirán en periodos de tiempo determinados (cada semana, mes, etc.)
+     
 1.4 URGENTE: Si los productos tienen un porcentaje de utilidad > 100% Se Debe otorgar un 5% adicional de comisión
