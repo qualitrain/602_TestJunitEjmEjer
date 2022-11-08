@@ -33,7 +33,7 @@ import qtx.org.negocio.NegocioException;
 public class CalculadoraComisionesTests {
 	
 	@BeforeEach
-	@Timeout(value = 500, unit = TimeUnit.MICROSECONDS)
+	@Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
 	void preProcesarPrueba() {
 		System.out.println("pre-procesamiento");
 	}

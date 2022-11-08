@@ -7,6 +7,8 @@ import qtx.org.entidades.Producto;
 import qtx.org.entidades.Temporalidad;
 
 public class CalculadoraComisiones {
+	//Politicas de aplicación específica
+	private IGestorComisionesArticulo provComisiones;
 	
 	//Politicas de aplicacion General
 	private double porcentajeComision;	
@@ -17,7 +19,20 @@ public class CalculadoraComisiones {
 		this.porcentajeComision = porcentajeComision;
 		this.porcComisionXTemporalidad = new HashMap<>();
 	}
+	public CalculadoraComisiones() {
+		super();
+		this.porcentajeComision = 0;
+		this.porcComisionXTemporalidad = new HashMap<>();
+	}
 	
+	public IGestorComisionesArticulo getProvComisiones() {
+		return provComisiones;
+	}
+
+	public void setProvComisiones(IGestorComisionesArticulo provComisiones) {
+		this.provComisiones = provComisiones;
+	}
+
 	public void agregarPorcComisionXtemporalidad(Temporalidad temp, double dscto) {
 		this.porcComisionXTemporalidad.put(temp, dscto);
 	}
@@ -73,14 +88,19 @@ public class CalculadoraComisiones {
 			}
 			return this.calcularComisionItemConTemporalidad(movto.getTemporalidad(),
 					                                 movto.getPrecioAplicablePorUnidad(), 
-					                                 movto.getCantidadUnidades()   );
+					                                 movto.getCantidadUnidades(), movto.getId()   );
 		}
 	}
 
 	private double calcularComisionItemConTemporalidad(Temporalidad temporalidad, double precioPorUnidad,
-			int cantUnidades) {
+			int cantUnidades, String id) {
 		double porcenComision = this.porcComisionXTemporalidad.getOrDefault(temporalidad, this.porcentajeComision);
-		return porcenComision * precioPorUnidad * cantUnidades;
+		double baseComision = precioPorUnidad * cantUnidades;
+		double comision = porcenComision * baseComision;
+		if(this.provComisiones == null)
+			return comision;
+		comision += (baseComision - comision) * this.provComisiones.getComisionItem(id);
+		return comision;
 		
 	}
 
@@ -91,7 +111,16 @@ public class CalculadoraComisiones {
 		if(movto.tieneUtilidad() == false) {
 			return 0;
 		}
-		double comision = movto.getUtilidadPorUnidad() * movto.getCantidadUnidades() * this.porcentajeComision;
+		double baseComision = movto.getUtilidadPorUnidad() * movto.getCantidadUnidades();
+		double comision = baseComision * this.porcentajeComision;
+		if(this.provComisiones == null) {
+			return comision;
+		}
+		double porComisArt = this.provComisiones.getComisionItem(movto.getId());
+		if( porComisArt == 0) {
+			return  comision;
+		}
+		comision += ( baseComision - comision) * porComisArt;
 		return comision;
 	}
 }
