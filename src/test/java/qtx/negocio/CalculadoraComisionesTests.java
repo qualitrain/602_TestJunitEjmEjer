@@ -3,7 +3,7 @@ package qtx.negocio;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
@@ -11,6 +11,9 @@ import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import qtx.org.entidades.Producto;
 import qtx.org.entidades.Servicio;
@@ -22,12 +25,30 @@ import qtx.org.negocio.NegocioException;
 public class CalculadoraComisionesTests {
 	
 	@Nested
+	@Tag("Depreciadas")
 	@DisplayName("Tests que van a ser remplazados en la siguiente versión")
+//	@Disabled("Para ver que pasa")
 	class ProductoTestsPorDepreciar {
 	
 	@Test
 	@DisplayName("Calcular comision s/Producto válido, con Utilidad y cant=1")
 	public void testCalcularComisionOK() {
+		
+		//Dados
+		Producto producto = new Producto("X-1", "Camisa", 855, 355);
+		
+		//Cuando
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.10);
+		double comision = calculadora.calcularComision(producto, 1);
+		
+		//Entonces
+//		assertEquals(50,comision,0.00001,"costo distinto del esperado");
+		assertEquals(50, comision);
+	}
+	@ParameterizedTest(name = "Iteracion: {index} con porc de comision = {0}")
+	@DisplayName("** Calcular comision s/Producto válido, con Utilidad y comision variable **")
+	@ValueSource(doubles = {0.05,0.1,0.2,0.6,0.5})
+	public void testCalcularComisionOK(double porcComision) {
 		
 		//Dados
 		Producto producto = new Producto("X-1", "Camisa", 855, 355);
@@ -79,8 +100,8 @@ public class CalculadoraComisionesTests {
 		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.10);
 		assertThrows(NegocioException.class, () -> {		
 			calculadora.calcularComision(producto, cantidad);
-		});			
-	}
+			});			
+		}
 	}
 	@Test
 	@DisplayName("Comision sobre servicio anual y cantidad = 10")
@@ -89,6 +110,83 @@ public class CalculadoraComisionesTests {
 		//Dados: Valores usados en la prueba
 		double precioDiario = 10.0;
 		Temporalidad duracionServicio = Temporalidad.ANUAL;
+		double porcComisionAnual = 0.20;
+		int cantServicios = 10;
+		Servicio servicio = new Servicio("Str01","Streaming HBO", precioDiario);
+		double comisionEsperada = precioDiario * duracionServicio.getNdias() 
+				                               * porcComisionAnual * cantServicios;	
+		
+		//Cuando: Código a evaluar
+		IMovtoComisionable posibleVenta = servicio.getIMovtoComisionable(duracionServicio, cantServicios);
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.05);
+		calculadora.agregarPorcComisionXtemporalidad(duracionServicio, porcComisionAnual);
+		double comisionCalculada = calculadora.calcularComision(posibleVenta);
+		
+		//Entonces: Validación de resultados esperados vc obtenidos
+		assertEquals(comisionEsperada, comisionCalculada);
+	}
+	
+	@ParameterizedTest
+	@DisplayName("Comision sobre servicio periodico y cantidad = 10")
+	@ValueSource(ints = {0,2,3})
+	public void testCalcularComision_servicioPeriodico_cant10(int iPeriodicidad) {
+		Temporalidad[] temporalidades = {
+				Temporalidad.MENSUAL,
+				Temporalidad.BIMESTRAL,
+				Temporalidad.SEMESTRAL,
+				Temporalidad.ANUAL};
+		
+		//Dados: Valores usados en la prueba
+		double precioDiario = 10.0;
+		Temporalidad duracionServicio = temporalidades[iPeriodicidad];
+		double porcComisionAnual = 0.20;
+		int cantServicios = 10;
+		Servicio servicio = new Servicio("Str01","Streaming HBO", precioDiario);
+		double comisionEsperada = precioDiario * duracionServicio.getNdias() 
+				                               * porcComisionAnual * cantServicios;	
+		
+		//Cuando: Código a evaluar
+		IMovtoComisionable posibleVenta = servicio.getIMovtoComisionable(duracionServicio, cantServicios);
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.05);
+		calculadora.agregarPorcComisionXtemporalidad(duracionServicio, porcComisionAnual);
+		double comisionCalculada = calculadora.calcularComision(posibleVenta);
+		
+		//Entonces: Validación de resultados esperados vc obtenidos
+		assertEquals(comisionEsperada, comisionCalculada);
+	}
+	
+	@ParameterizedTest
+	@DisplayName("Comision sobre servicio periodico y cantidad = 10 usando @EnumSource")
+	@EnumSource(Temporalidad.class)
+	public void testCalcularComision_servicioPeriodico_cant10_B(Temporalidad temporalidadI) {
+		
+		//Dados: Valores usados en la prueba
+		double precioDiario = 10.0;
+		Temporalidad duracionServicio = temporalidadI;
+		double porcComisionAnual = 0.20;
+		int cantServicios = 10;
+		Servicio servicio = new Servicio("Str01","Streaming HBO", precioDiario);
+		double comisionEsperada = precioDiario * duracionServicio.getNdias() 
+				                               * porcComisionAnual * cantServicios;	
+		
+		//Cuando: Código a evaluar
+		IMovtoComisionable posibleVenta = servicio.getIMovtoComisionable(duracionServicio, cantServicios);
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.05);
+		calculadora.agregarPorcComisionXtemporalidad(duracionServicio, porcComisionAnual);
+		double comisionCalculada = calculadora.calcularComision(posibleVenta);
+		
+		//Entonces: Validación de resultados esperados vc obtenidos
+		assertEquals(comisionEsperada, comisionCalculada);
+	}
+
+	@ParameterizedTest
+	@DisplayName("Comision sobre servicio periodico y cantidad = 10 usando strings")
+	@ValueSource(strings = {"ANUAL","MENSUAL"})
+	public void testCalcularComision_servicioPeriodico_cant10_A(String valTemporalidadI) {
+		
+		//Dados: Valores usados en la prueba
+		double precioDiario = 10.0;
+		Temporalidad duracionServicio = Temporalidad.valueOf(valTemporalidadI);
 		double porcComisionAnual = 0.20;
 		int cantServicios = 10;
 		Servicio servicio = new Servicio("Str01","Streaming HBO", precioDiario);
