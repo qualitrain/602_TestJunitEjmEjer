@@ -3,8 +3,10 @@ package qtx.negocio;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,8 +14,10 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -29,6 +33,14 @@ import qtx.org.negocio.IdInvalidoException;
 import qtx.org.negocio.NegocioException;
 
 public class CalculadoraComisionesTests {
+	private static int numTest = 1;
+	
+	@BeforeEach
+//	@Timeout(value = 3, unit = TimeUnit.MILLISECONDS)
+	public void preProcesarTest() {
+		System.out.println("Preprocesando test " + numTest);
+		numTest++;
+	}
 	
 	@Nested
 	@Tag("Depreciadas")
@@ -75,6 +87,7 @@ public class CalculadoraComisionesTests {
 	@ParameterizedTest(name = "Iteracion: {index} con porc de comision = {0}")
 	@DisplayName("** Calcular comision s/Producto válido, con Utilidad y comision variable **")
 	@ValueSource(doubles = {0.05,0.1,0.2,0.6,0.5})
+	@Timeout(value = 3, unit = TimeUnit.MILLISECONDS)
 	public void testCalcularComisionOK(double porcComision) {
 		
 		//Dados
@@ -229,6 +242,30 @@ public class CalculadoraComisionesTests {
 		//Entonces: Validación de resultados esperados vc obtenidos
 		assertEquals(comisionEsperada, comisionCalculada);
 	}
+	@DisplayName("Test multiparametro alimentado con @MethodSource")
+	@ParameterizedTest(name = "Iteracion {index} con valores {0}, {1}, {2}, {3}")
+	@MethodSource("getValoresTest_multiParam")
+	public void testCalcularComision_servicioPeriodico_cant10_multiParam(double precioDiario, 
+			double porcComisionAnual, int cantServicios, Temporalidad periodo) {
+		
+		//Dados: Valores usados en la prueba
+//		double precioDiario = 10.0;
+		Temporalidad duracionServicio = periodo;
+//		double porcComisionAnual = 0.20;
+//		int cantServicios = 10;
+		Servicio servicio = new Servicio("Str01","Streaming HBO", precioDiario);
+		double comisionEsperada = precioDiario * duracionServicio.getNdias() 
+				                               * porcComisionAnual * cantServicios;	
+		
+		//Cuando: Código a evaluar
+		IMovtoComisionable posibleVenta = servicio.getIMovtoComisionable(duracionServicio, cantServicios);
+		CalculadoraComisiones calculadora = new CalculadoraComisiones(0.05);
+		calculadora.agregarPorcComisionXtemporalidad(duracionServicio, porcComisionAnual);
+		double comisionCalculada = calculadora.calcularComision(posibleVenta);
+		
+		//Entonces: Validación de resultados esperados vc obtenidos
+		assertEquals(comisionEsperada, comisionCalculada);
+	}
 	
 	@DisplayName("Calcular comision s/Producto válido, con Utilidad y cant=1 usando IMovtoComisionable")
 	@RepeatedTest(4)
@@ -313,4 +350,13 @@ public class CalculadoraComisionesTests {
 				(Double)1150.0);
 	}
 	
+	public static Stream<Arguments> getValoresTest_multiParam(){
+		return Stream.of(
+				Arguments.arguments(20.0, 0.10, 1, Temporalidad.ANUAL),
+				Arguments.arguments(15.0, 0.10, 2, Temporalidad.SEMESTRAL),
+				Arguments.arguments(18.0, 0.15, 1, Temporalidad.BIMESTRAL),
+				Arguments.arguments(13.0, 0.05, 2, Temporalidad.MENSUAL)
+				);
+		
+	}
 }

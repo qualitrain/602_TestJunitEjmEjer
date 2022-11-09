@@ -7,6 +7,8 @@ import qtx.org.entidades.Producto;
 import qtx.org.entidades.Temporalidad;
 
 public class CalculadoraComisiones {
+	//Politicas de aplicación individual (a nivel producto o servicio)
+	private IGestorComisionesArticulo provComisiones;
 	
 	//Politicas de aplicacion General
 	private double porcentajeComision;	
@@ -18,6 +20,14 @@ public class CalculadoraComisiones {
 		this.porcComisionXTemporalidad = new HashMap<>();
 	}
 	
+	public IGestorComisionesArticulo getProvComisiones() {
+		return provComisiones;
+	}
+
+	public void setProvComisiones(IGestorComisionesArticulo provComisiones) {
+		this.provComisiones = provComisiones;
+	}
+
 	public void agregarPorcComisionXtemporalidad(Temporalidad temp, double dscto) {
 		this.porcComisionXTemporalidad.put(temp, dscto);
 	}
