@@ -19,6 +19,11 @@ public class CalculadoraComisiones {
 		this.porcentajeComision = porcentajeComision;
 		this.porcComisionXTemporalidad = new HashMap<>();
 	}
+	public CalculadoraComisiones() {
+		super();
+		this.porcentajeComision = 0;
+		this.porcComisionXTemporalidad = new HashMap<>();
+	}
 	
 	public IGestorComisionesArticulo getProvComisiones() {
 		return provComisiones;
@@ -98,7 +103,11 @@ public class CalculadoraComisiones {
 		if(movto.tieneUtilidad() == false) {
 			return 0;
 		}
-		double comision = movto.getUtilidadPorUnidad() * movto.getCantidadUnidades() * this.porcentajeComision;
+		double comisionUsual = movto.getUtilidadPorUnidad() * movto.getCantidadUnidades() * this.porcentajeComision;
+		if(this.provComisiones == null)
+			return comisionUsual;
+		double porcComisionXart = this.provComisiones.getComisionItem(movto.getId());		
+		double comision = comisionUsual + (movto.getUtilidadPorUnidad() - comisionUsual ) * porcComisionXart;
 		return comision;
 	}
 }
