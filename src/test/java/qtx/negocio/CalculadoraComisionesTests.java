@@ -66,7 +66,6 @@ public class CalculadoraComisionesTests {
 		@Test
 		@DisplayName("Calcular comision s/Producto válido, sin Utilidad y cant=1")
 		@Tag("deprecated")
-		@Disabled
 		public void testCalcularComision_utilidadNegativa() {
 			//Dados
 			Producto producto = new Producto("X-1", "Camisa", 255, 355); //Tiene utilidad negativa
