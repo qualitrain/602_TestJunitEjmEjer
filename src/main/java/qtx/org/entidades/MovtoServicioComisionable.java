@@ -27,7 +27,7 @@ public class MovtoServicioComisionable implements IMovtoComisionable {
 
 	@Override
 	public String getId() {
-		return this.getId();
+		return this.servicio.getId();
 	}
 
 	@Override

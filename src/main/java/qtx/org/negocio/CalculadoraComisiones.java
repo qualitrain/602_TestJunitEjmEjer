@@ -85,14 +85,19 @@ public class CalculadoraComisiones {
 			}
 			return this.calcularComisionItemConTemporalidad(movto.getTemporalidad(),
 					                                 movto.getPrecioAplicablePorUnidad(), 
-					                                 movto.getCantidadUnidades()   );
+					                                 movto.getCantidadUnidades(), movto.getId() );
 		}
 	}
 
 	private double calcularComisionItemConTemporalidad(Temporalidad temporalidad, double precioPorUnidad,
-			int cantUnidades) {
+			int cantUnidades, String idArt) {
 		double porcenComision = this.porcComisionXTemporalidad.getOrDefault(temporalidad, this.porcentajeComision);
-		return porcenComision * precioPorUnidad * cantUnidades;
+		double comisionUsual = porcenComision * precioPorUnidad * cantUnidades;
+		if(this.provComisiones == null)
+			return comisionUsual;
+		double porcComisionXart = this.provComisiones.getComisionItem(idArt);		
+		double comision = comisionUsual + ((precioPorUnidad * cantUnidades) - comisionUsual ) * porcComisionXart;
+		return comision;
 		
 	}
 
